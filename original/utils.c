@@ -27,7 +27,7 @@ void DumpFieldToFile(int sx, int sy, int sz,
   
   FILE *fp;
   fp=fopen(fNameHeader, "w+");
-  fprintf(fp,"in=\"./%s\"\n", fNameBinary);
+  fprintf(fp,"in=\"%s\"\n", fNameBinary);
   fprintf(fp,"data_format=\"native_float\"\n");
   fprintf(fp,"esize=%lu\n", sizeof(float)); 
   fprintf(fp,"n1=%d\n",ixEnd-ixStart+1);
@@ -94,7 +94,8 @@ SlicePtr OpenSliceFile(int ixStart, int ixEnd,
   strcpy(ret->fName,fName);
   strcpy(ret->fNameHeader,fName);
   strcat(ret->fNameHeader,".rsf");
-  strcpy(ret->fNameBinary,FNAMEBINARYPATH);
+
+  //strcpy(ret->fNameBinary,FNAMEBINARYPATH);
   strcat(ret->fNameBinary,ret->fNameHeader);
   strcat(ret->fNameBinary,"@");
 

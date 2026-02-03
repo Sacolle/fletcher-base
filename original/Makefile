@@ -6,7 +6,13 @@ backend=OpenMP
 arch=$(backend)
 
 include config.mk
-include $(arch)/flags.mk
+#include $(arch)/flags.mk
+
+CFLAGS = -O0 -g -fopenmp -lm
+
+ifdef SCRATCH
+CFLAGS += -DOUTPUT_FOLDER='"$(SCRATCH)"'
+endif
 
 OBJ1=\
 	source.o \

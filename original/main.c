@@ -16,6 +16,10 @@ enum Form {ISO, VTI, TTI};
 #define RANDOM_SEED 0
 #endif
 
+#ifndef OUTPUT_FOLDER
+#define OUTPUT_FOLDER "./"
+#endif
+
 int main(int argc, char** argv) {
 
   enum Form prob;        // problem formulation
@@ -41,6 +45,9 @@ int main(int argc, char** argv) {
   int i, it;             // for indices
 //PPL  char fNameAbs[128];    // prefix of absortion file
   char fNameSec[128];    // prefix of sections files
+                         //
+  char output_file_name[256] = OUTPUT_FOLDER;    // prefix of sections files
+                         //
 
   const float dtOutput=0.01;
 
@@ -55,6 +62,9 @@ int main(int argc, char** argv) {
     exit(-1);
   } 
   strcpy(fNameSec,argv[1]);
+  strcat(output_file_name, argv[1]);
+  printf("outputing file to %s", output_file_name);
+
   nx=atoi(argv[2]);
   ny=atoi(argv[3]);
   nz=atoi(argv[4]);
@@ -280,7 +290,7 @@ int main(int argc, char** argv) {
 		     iyStart, iyEnd,
 		     izStart, izEnd,
 		     dx, dy, dz, dt,
-		     fNameSec);
+		     output_file_name);
 
   DumpSliceFile(sx,sy,sz,pc,sPtr);
 #ifdef _DUMP

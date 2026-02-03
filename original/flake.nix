@@ -3,11 +3,15 @@
 
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+        madagascar.url = "github:Sacolle/nix-madagascar"; 
     };
 
-    outputs = { self, nixpkgs }: 
+    outputs = { self, nixpkgs, madagascar }: 
     let 
         system = "x86_64-linux";
+        pkgs = import nixpkgs { 
+            inherit system; 
+        };
     in
     {
         devShells.${system}.default = pkgs.mkShell {
@@ -16,6 +20,7 @@
                 bashInteractive
                 gdb
                 gcc
+                madagascar.packages.${system}.default
             ];
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence

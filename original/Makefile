@@ -2,7 +2,7 @@
 #   module load gompi
 
 # Default
-backend=CUDA
+backend=OpenMP
 arch=$(backend)
 
 include config.mk

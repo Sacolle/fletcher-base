@@ -12,6 +12,10 @@
 
 enum Form {ISO, VTI, TTI};
 
+#ifndef RANDOM_SEED
+#define RANDOM_SEED 0
+#endif
+
 int main(int argc, char** argv) {
 
   enum Form prob;        // problem formulation
@@ -41,6 +45,8 @@ int main(int argc, char** argv) {
   const float dtOutput=0.01;
 
   it = 0; //PPL
+
+  srand(RANDOM_SEED);
     
   // input problem definition
   
@@ -115,7 +121,7 @@ int main(int argc, char** argv) {
   printf("Grid is extended by %d absortion points and %d border points at each extreme\n", absorb, bord);
   printf("Wave is propagated at internal+absortion points of size (%d,%d,%d)\n",
 	 nx+2*absorb, ny+2*absorb, nz+2*absorb);
-  printf("Source at coordinates (%d,%d,%d)\n", ixSource,iySource,izSource);
+  printf("Source at coordinate %d(%d,%d,%d)\n", iSource, ixSource,iySource,izSource);
   printf("Will run %d time steps of %f to reach time %f\n", st, dt, st*dt);
 
 #ifdef _OPENMP

@@ -3,4 +3,8 @@
 **/*.rsf
 TTI*
 **/*.swp
+sf*
+*.txt
+diff.rsf@
+Report.csv
 

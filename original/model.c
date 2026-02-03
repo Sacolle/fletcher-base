@@ -110,21 +110,21 @@ void Model(const int st, const int iSource, const float dtOutput, SlicePtr sPtr,
 #endif
 
     tSim=it*dt;
-    // if (tSim >= tOut) {
+    if (tSim >= tOut) {
       // printf("n_out: %d\n", nOut);
 
       DRIVER_Update_pointers(sx,sy,sz,pc);
 
-      // double dd1 = wtime();
-      //DumpSliceFile_Nofor(sx,sy,sz,pc,sPtr);
-      // tdt+=wtime()-dd1;
+       double dd1 = wtime();
+      DumpSliceFile_Nofor(sx,sy,sz,pc,sPtr);
+      tdt+=wtime()-dd1;
 
       tOut=(++nOut)*dtOutput;
 #ifdef _DUMP
       DRIVER_Update_pointers(sx,sy,sz,pc);
       //      DumpSliceSummary(sx,sy,sz,sPtr,dt,it,pc,src);
 #endif
-    //}
+    }
   }
 
   // close binary output file before measuring time to include total io time

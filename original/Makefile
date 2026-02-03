@@ -6,9 +6,9 @@ backend=OpenMP
 arch=$(backend)
 
 include config.mk
-#include $(arch)/flags.mk
+include $(arch)/flags.mk
 
-CFLAGS = -O0 -g -fopenmp -lm
+#CFLAGS = -O0 -g -fopenmp -lm
 
 ifdef SCRATCH
 CFLAGS += -DOUTPUT_FOLDER='"$(SCRATCH)"'
@@ -75,3 +75,6 @@ clean:
 
 clean-all:
 	rm -f */*.o *.o $(TARGET)
+
+run: $(TARGET)
+	time ./$(TARGET) TTI 210 210 210 16 12.5 12.5 12.5 0.001 0.5 

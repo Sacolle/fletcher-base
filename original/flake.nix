@@ -3,32 +3,30 @@
 
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-        madagascar.url = "github:Sacolle/nix-madagascar"; 
+        old-nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+	#cudart.url = "github:nixos/nixpkgs?ref=25d1b84f5c90632a623c48d83a2faf156451e6b1";
     };
 
-    outputs = { self, nixpkgs, madagascar }: 
+    outputs = { self, nixpkgs, old-nixpkgs }: 
     let 
+	config = { 
+	    allowUnfree = true;
+	    cudaSupport = true;
+	    #cudaVersion = "12";
+	};
         system = "x86_64-linux";
-        pkgs = import nixpkgs { 
-            inherit system; 
-        };
+        pkgs = import nixpkgs { inherit system config; };
+        old-pkgs = import old-nixpkgs { inherit system config; };
+	#cuda_cudart = (import cudart { inherit system config; }).cudaPackages.cuda_cudart;
     in
     {
-        devShells.${system}.default = pkgs.mkShell {
-            buildInputs = with pkgs; [
-                # for bash to work properlly inside vscode
-                bashInteractive
-                gdb
-                gcc
-                madagascar.packages.${system}.default
+        devShells.${system}.default = pkgs.mkShell.override { stdenv = pkgs.gcc13Stdenv; } {
+            buildInputs = [
+                old-pkgs.cudaPackages_12_4.cuda_nvcc
+                old-pkgs.cudaPackages_12_4.cuda_cudart
             ];
-            # export StarPU and hwloc store locations 
-            # for use in vscode intellisence
-            OMP_FLAG = "-fopenmp";
-
-            shellHook = ''
-                export SHELL=/run/current-system/sw/bin/bash
-            '';
+            # BACKEND = "CUDA";
+            # CUDA_GPU_SM = "sm_89";
         };
     };
 }

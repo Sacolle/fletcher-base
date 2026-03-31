@@ -1,3 +1,3 @@
 CC=$(GCC)
-CFLAGS=-O3 $(OMP_FLAG)
+CFLAGS=-O3 -fopenmp # $(OMP_FLAG)
 LIBS=$(GCC_LIBS)

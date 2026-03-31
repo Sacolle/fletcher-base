@@ -2,8 +2,14 @@
 #   module load gompi
 
 # Default
-backend=OpenMP
+
+ifndef BACKEND
+echo $(error, backend not defined)
+endif
+
+backend=$(BACKEND)
 arch=$(backend)
+
 
 include config.mk
 include $(arch)/flags.mk
@@ -33,6 +39,7 @@ OBJ=main.o $(OBJ1)
 TARGET = ModelagemFletcher.exe
 
 all: 	$(OBJ)
+	@echo $(POP)
 	cd $(arch) && make
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(arch)/*.o $(LIBS)
 

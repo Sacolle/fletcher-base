@@ -4,29 +4,30 @@
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
         old-nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
-	#cudart.url = "github:nixos/nixpkgs?ref=25d1b84f5c90632a623c48d83a2faf156451e6b1";
     };
-
     outputs = { self, nixpkgs, old-nixpkgs }: 
     let 
-	config = { 
+        config = {
 	    allowUnfree = true;
 	    cudaSupport = true;
-	    #cudaVersion = "12";
 	};
         system = "x86_64-linux";
         pkgs = import nixpkgs { inherit system config; };
         old-pkgs = import old-nixpkgs { inherit system config; };
-	#cuda_cudart = (import cudart { inherit system config; }).cudaPackages.cuda_cudart;
+        # setup-script = pkgs.writeShellScriptBin ""
     in
     {
-        devShells.${system}.default = pkgs.mkShell.override { stdenv = pkgs.gcc13Stdenv; } {
+        devShells.${system}.default = pkgs.mkShell.override { stdenv = old-pkgs.gcc12Stdenv; } {
             buildInputs = [
-                old-pkgs.cudaPackages_12_4.cuda_nvcc
-                old-pkgs.cudaPackages_12_4.cuda_cudart
+                old-pkgs.cudaPackages_12_2.cuda_nvcc
+                old-pkgs.cudaPackages_12_2.cuda_cudart
             ];
-            # BACKEND = "CUDA";
-            # CUDA_GPU_SM = "sm_89";
+            shellHook = ''
+              	export DRIVER_DIR=~  
+		source ./setup-cuda-drivers.sh
+            '';
+            BACKEND = "CUDA";
+            CUDA_GPU_SM = "sm_89";
         };
     };
 }

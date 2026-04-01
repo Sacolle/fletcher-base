@@ -16,9 +16,7 @@ enum Form {ISO, VTI, TTI};
 #define RANDOM_SEED 0
 #endif
 
-#ifndef OUTPUT_FOLDER
-#define OUTPUT_FOLDER "./"
-#endif
+#define DEFAULT_OUTPUT_FOLDER "./"
 
 int main(int argc, char** argv) {
 
@@ -37,6 +35,7 @@ int main(int argc, char** argv) {
   float dz;              // grid step in z
   float dt;              // time advance at each time step
   float tmax;            // desired simulation final time
+  float dtOutput;        // when dt % dtOutput == 0, save the medium
   int ixSource;          // source x index
   int iySource;          // source y index
   int izSource;          // source z index
@@ -44,12 +43,18 @@ int main(int argc, char** argv) {
 //PPL  int i, ix, iy, iz, it; // for indices
   int i, it;             // for indices
 //PPL  char fNameAbs[128];    // prefix of absortion file
-  char fNameSec[128];    // prefix of sections files
-                         //
-  char output_file_name[256] = OUTPUT_FOLDER;    // prefix of sections files
-                         //
+  char* fNameSec;    // prefix of sections files
+  if((fNameSec = getenv("OUTPUT_FILE")) == NULL){
+    fNameSec = strdup(argv[1]); //use the form as the deafult name
+  }
 
-  const float dtOutput=0.01;
+  char output_file_name[256];
+  char* folder_envvar;
+  if((folder_envvar = getenv("OUTPUT_FOLDER")) == NULL){
+    folder_envvar = DEFAULT_OUTPUT_FOLDER;
+  }
+  strcpy(output_file_name, folder_envvar);
+
 
   it = 0; //PPL
 
@@ -61,8 +66,7 @@ int main(int argc, char** argv) {
     printf("program requires %d input arguments; execution halted\n",ARGS-1);
     exit(-1);
   } 
-  strcpy(fNameSec,argv[1]);
-  strcat(output_file_name, argv[1]);
+  strcat(output_file_name, fNameSec);
   printf("outputing file to %s", output_file_name);
 
   nx=atoi(argv[2]);
@@ -74,20 +78,22 @@ int main(int argc, char** argv) {
   dz=atof(argv[8]);
   dt=atof(argv[9]);
   tmax=atof(argv[10]);
+  dtOutput=atof(argv[10]);
 
   // verify problem formulation
+  const char* form_str = argv[1];
 
-  if (strcmp(fNameSec,"ISO")==0) {
+  if (strcmp(form_str,"ISO")==0) {
     prob=ISO;
   }
-  else if (strcmp(fNameSec,"VTI")==0) {
+  else if (strcmp(form_str,"VTI")==0) {
     prob=VTI;
   }
-  else if (strcmp(fNameSec,"TTI")==0) {
+  else if (strcmp(form_str,"TTI")==0) {
     prob=TTI;
   }
   else {
-    printf("Input problem formulation (%s) is unknown\n", fNameSec);
+    printf("Input problem formulation (%s) is unknown\n", form_str);
     exit(-1);
   }
 

@@ -24,7 +24,7 @@
             ];
             shellHook = ''
               	export DRIVER_DIR=~  
-		source ./setup-cuda-drivers.sh
+		        source ${self}/setup-cuda-drivers.sh
             '';
             BACKEND = "CUDA";
             CUDA_GPU_SM = "sm_89";

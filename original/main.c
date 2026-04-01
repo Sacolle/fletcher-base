@@ -66,6 +66,7 @@ int main(int argc, char** argv) {
     printf("program requires %d input arguments; execution halted\n",ARGS-1);
     exit(-1);
   } 
+  strcat(output_file_name, "/");
   strcat(output_file_name, fNameSec);
   printf("outputing file to %s", output_file_name);
 

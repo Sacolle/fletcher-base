@@ -79,4 +79,4 @@ clean-all:
 	rm -f */*.o *.o $(TARGET)
 
 run: $(TARGET)
-	time ./$(TARGET) TTI 210 210 210 16 12.5 12.5 12.5 0.001 0.5 
+	time ./$(TARGET) TTI 210 210 210 16 12.5 12.5 12.5 0.00001 0.0004 0.00005

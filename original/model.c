@@ -157,7 +157,7 @@ void Model(const int st, const int iSource, const float dtOutput, SlicePtr sPtr,
   // printf("Total dump time (s): %f\n", tdt);
   printf ("Execution time (s) is %lf\n", walltime);
   printf ("Total execution time (s) is %lf\n", execution_time);
-  printf ("MSamples/s %.0lf\n", MSamples);
+  printf ("MSamples/s %lf\n", MSamples);
   printf ("Memory High Water Mark is %ld %s\n",HWM, HWMUnit);
 
   printf("original,%s,%d,%d,%d,%d,%.2f,%.2f,%.2f,%f,%f,%lu,%lu,%lf,%lf,%.0lf\n", 

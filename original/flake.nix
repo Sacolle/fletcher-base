@@ -17,17 +17,22 @@
         # setup-script = pkgs.writeShellScriptBin ""
     in
     {
-        devShells.${system}.default = pkgs.mkShell.override { stdenv = old-pkgs.gcc12Stdenv; } {
-            buildInputs = [
-                old-pkgs.cudaPackages_12_2.cuda_nvcc
-                old-pkgs.cudaPackages_12_2.cuda_cudart
-            ];
-            shellHook = ''
-              	export DRIVER_DIR=~  
-		        source ${self}/setup-cuda-drivers.sh
-            '';
-            BACKEND = "CUDA";
-            CUDA_GPU_SM = "sm_89";
+        devShells.${system} = {
+            default = pkgs.mkShell.override { stdenv = old-pkgs.gcc12Stdenv; } {
+                buildInputs = [
+                    old-pkgs.cudaPackages_12_2.cuda_nvcc
+                    old-pkgs.cudaPackages_12_2.cuda_cudart
+                ];
+                shellHook = ''
+                    export DRIVER_DIR=~  
+                    source ${self}/setup-cuda-drivers.sh
+                '';
+                BACKEND = "CUDA";
+                CUDA_GPU_SM = "sm_89";
+            };
+            cpu-experiments = pkgs.mkShell {
+                BACKEND = "OpenMP";
+            };
         };
     };
 }

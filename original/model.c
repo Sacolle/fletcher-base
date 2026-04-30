@@ -154,7 +154,7 @@ void Model(const int st, const int iSource, const float dtOutput, SlicePtr sPtr,
 
 	double execution_time = ((double)(stamp2-stamp1))*1e-9;
   
-  // printf("Total dump time (s): %f\n", tdt);
+  printf("Total dump time (s): %f\n", tdt);
   printf ("Execution time (s) is %lf\n", walltime);
   printf ("Total execution time (s) is %lf\n", execution_time);
   printf ("MSamples/s %lf\n", MSamples);

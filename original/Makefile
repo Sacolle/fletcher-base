@@ -36,7 +36,7 @@ TARGET = ModelagemFletcher.exe
 all: 	$(OBJ)
 	@echo $(POP)
 	cd $(arch) && make
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(arch)/*.o $(LIBS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(arch)/*.o $(LIBS) 
 
 main.o:	main.c $(OBJ1)
 	$(CC) -c $(CFLAGS) main.c

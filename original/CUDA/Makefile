@@ -7,9 +7,9 @@ endif
 
 all:	
 	$(CC) $(CFLAGS) $(COMMON_FLAGS) -c cuda_driver.c
-	$(GPUCC) $(GPUCFLAGS) $(COMMON_FLAGS) -c cuda_stuff.cu
-	$(GPUCC) $(GPUCFLAGS) $(COMMON_FLAGS) -c cuda_propagate.cu
-	$(GPUCC) $(GPUCFLAGS) $(COMMON_FLAGS) -c cuda_insertsource.cu
+	$(GPUCC) $(GPUCFLAGS) $(COMMON_FLAGS) $(NIX_CUDA_CFLAGS) -c cuda_stuff.cu
+	$(GPUCC) $(GPUCFLAGS) $(COMMON_FLAGS) $(NIX_CUDA_CFLAGS) -c cuda_propagate.cu
+	$(GPUCC) $(GPUCFLAGS) $(COMMON_FLAGS) $(NIX_CUDA_CFLAGS) -c cuda_insertsource.cu
 
 clean:
 	rm -f *.o *.a

@@ -4,8 +4,9 @@
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
         old-nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
+	nix-gl-host.url = "github:numtide/nix-gl-host";
     };
-    outputs = { self, nixpkgs, old-nixpkgs }: 
+    outputs = { self, nixpkgs, old-nixpkgs, nix-gl-host }: 
     let 
         config = {
             allowUnfree = true;
@@ -15,7 +16,13 @@
         pkgs = import nixpkgs { inherit system config; };
         old-pkgs = import old-nixpkgs { inherit system config; };
 
-        fletcher = pkgs.callPackage ./fletcher-base.nix { OpenMPbackend = true; };
+        fletcher = pkgs.callPackage ./fletcher-base.nix {
+		stdenv = old-pkgs.gcc12Stdenv;
+		CUDAbackend = true; 
+		cuda-arquitecture = "sm_61";
+		cudaPackages = old-pkgs.cudaPackages_12_2;
+	};
+	nixglhost = nix-gl-host.defaultPackage.${system};
     in
     {
         packages.${system} = {
@@ -38,6 +45,9 @@
             cpu-experiments = pkgs.mkShell {
                 BACKEND = "OpenMP";
             };
+	   	test = pkgs.mkShell {
+			buildInputs = [ fletcher  pkgs.gdb nixglhost ];	
+		};
         };
     };
 }

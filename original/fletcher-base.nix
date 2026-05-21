@@ -10,8 +10,8 @@
     OpenACCbackend ? false,
 }:
 let 
-    cudaNativeBuildInputs = with cudaPackages; [ cuda_nvcc cuda_cudart autoAddDriverRunpath];
-    cudaBuildInputs = with cudaPackages; [ cuda_nvcc cuda_cudart ];
+    cudaNativeBuildInputs = with cudaPackages; [ cuda_nvcc autoAddDriverRunpath];
+    cudaBuildInputs = with cudaPackages; [ cuda_cudart cuda_cccl ];
 
     trueto1 = b: if b then 1 else 0;
     backend-count = builtins.foldl' (acc: x: acc + (trueto1 x)) 0 [ CUDAbackend OpenMPbackend OpenACCbackend ];
@@ -37,6 +37,12 @@ stdenv.mkDerivation (f:
     nativeBuildInputs = lib.optional CUDAbackend cudaNativeBuildInputs;
 
     buildInputs = lib.optional CUDAbackend cudaBuildInputs;
+
+    makeFlags = lib.optionals CUDAbackend [
+        "NIX_CUDA_CFLAGS=-I${cudaPackages.cuda_cudart.dev}/include"
+	"NIX_CUDA_LDFLAGS=-L${cudaPackages.cuda_cudart.lib}/lib"
+];
+	# aPackages.cuda_cudart.dev}/include 
 
     installPhase = "mkdir -p $out/bin && cp ModelagemFletcher.exe $out/bin/fletcher-base";
 } // (lib.optionalAttrs CUDAbackend { CUDA_GPU_SM = cuda-arquitecture; })))

@@ -133,7 +133,6 @@ void Model(const int st, const int iSource, const float dtOutput, SlicePtr sPtr,
   uint64_t stamp2 = get_timestamp_ns();
 
   // get HWM data
-
 #define MEGA 1.0e-6
 #define GIGA 1.0e-9
   const char StringHWM[6]="VmHWM";
@@ -190,6 +189,7 @@ void Model(const int st, const int iSource, const float dtOutput, SlicePtr sPtr,
   fclose(fr);
 
   fflush(stdout);
+
 
   // DRIVER_Finalize deallocate data, clean-up things etc 
   DRIVER_Finalize();

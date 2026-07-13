@@ -6,7 +6,7 @@
 #include <math.h>
 #include <string.h>
 
-void Model(const int st, const int iSource, const float dtOutput, SlicePtr sPtr, 
+void Model(const int st, const int iSource, const float dtOutput, const int enableIO, SlicePtr sPtr, 
            const int sx, const int sy, const int sz, const int bord,
            const float dx, const float dy, const float dz, const float dt, const int it, 
 	   float * restrict pp, float * restrict pc, float * restrict qp, float * restrict qc,

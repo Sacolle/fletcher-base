@@ -9,15 +9,11 @@
         };
         old-nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
     };
-    outputs = { nixpkgs, old-nixpkgs, nix-gl-host }: 
+    outputs = { self, nixpkgs, old-nixpkgs, nix-gl-host }: 
     let 
-        config = {
-            allowUnfree = true;
-            cudaSupport = true;
-        };
         system = "x86_64-linux";
-        pkgs = import nixpkgs { inherit system config; };
-        old-pkgs = import old-nixpkgs { inherit system config; };
+        pkgs = import nixpkgs { inherit system; };
+        old-pkgs = import old-nixpkgs { inherit system; config.allowUnfree = true; };
 
         fletcher = pkgs.callPackage ./fletcher-base.nix {
             stdenv = old-pkgs.gcc12Stdenv;

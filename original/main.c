@@ -43,7 +43,15 @@ int main(int argc, char** argv) {
 //PPL  int i, ix, iy, iz, it; // for indices
   int i, it;             // for indices
 //PPL  char fNameAbs[128];    // prefix of absortion file
-  char* fNameSec;    // prefix of sections files
+  char *fNameSec; // prefix of sections files
+
+  int enableIO = 1;
+  char* enableIOInput;
+  if((enableIOInput = getenv("ENABLE_IO")) != NULL){
+    enableIO = atoi(enableIOInput); //use the form as the deafult name
+  }
+
+
   if((fNameSec = getenv("OUTPUT_FILE")) == NULL){
     fNameSec = strdup(argv[1]); //use the form as the deafult name
   }
@@ -313,7 +321,7 @@ int main(int argc, char** argv) {
   // - calls InsertSource
   // - do AbsorbingBoundary and DumpSliceFile, if needed
   // - Finalize
-  Model(st,     iSource, dtOutput, sPtr,
+  Model(st,     iSource, dtOutput, enableIO, sPtr,
         sx,     sy,      sz,       bord,
         dx,     dy,      dz,       dt,   it, 
         pp,     pc,      qp,       qc,

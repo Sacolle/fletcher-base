@@ -2,11 +2,14 @@
     description = "Flake para o desenvolvimento do Fletcher-Base";
 
     inputs = {
-        nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+        nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
+	      nix-gl-host = {
+          url = "github:numtide/nix-gl-host";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
         old-nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
-	nix-gl-host.url = "github:numtide/nix-gl-host";
     };
-    outputs = { self, nixpkgs, old-nixpkgs, nix-gl-host }: 
+    outputs = { nixpkgs, old-nixpkgs, nix-gl-host }: 
     let 
         config = {
             allowUnfree = true;
@@ -17,12 +20,12 @@
         old-pkgs = import old-nixpkgs { inherit system config; };
 
         fletcher = pkgs.callPackage ./fletcher-base.nix {
-		stdenv = old-pkgs.gcc12Stdenv;
-		CUDAbackend = true; 
-		cuda-arquitecture = "sm_61";
-		cudaPackages = old-pkgs.cudaPackages_12_2;
-	};
-	nixglhost = nix-gl-host.defaultPackage.${system};
+            stdenv = old-pkgs.gcc12Stdenv;
+            CUDAbackend = true; 
+            cuda-arquitecture = "native";
+            cudaPackages = old-pkgs.cudaPackages_12_2;
+        };
+        nixglhost = nix-gl-host.defaultPackage.${system};
     in
     {
         packages.${system} = {
@@ -30,24 +33,7 @@
             inherit fletcher;
         };
         devShells.${system} = {
-            default = pkgs.mkShell.override { stdenv = old-pkgs.gcc12Stdenv; } {
-                buildInputs = [
-                    old-pkgs.cudaPackages_12_2.cuda_nvcc
-                    old-pkgs.cudaPackages_12_2.cuda_cudart
-                ];
-                shellHook = ''
-                    export DRIVER_DIR=~  
-                    source ${self}/setup-cuda-drivers.sh
-                '';
-                BACKEND = "CUDA";
-                CUDA_GPU_SM = "sm_89";
-            };
-            cpu-experiments = pkgs.mkShell {
-                BACKEND = "OpenMP";
-            };
-	   	test = pkgs.mkShell {
-			buildInputs = [ fletcher  pkgs.gdb nixglhost ];	
-		};
+            test = pkgs.mkShell { buildInputs = [ fletcher  pkgs.gdb nixglhost ]; };
         };
     };
 }

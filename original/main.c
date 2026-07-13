@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
   dz=atof(argv[8]);
   dt=atof(argv[9]);
   tmax=atof(argv[10]);
-  dtOutput=atof(argv[10]);
+  dtOutput=atof(argv[11]);
 
   // verify problem formulation
   const char* form_str = argv[1];
